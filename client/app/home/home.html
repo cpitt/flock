@@ -1,0 +1,17 @@
+<div  layout="column" style="height:500px;">
+  <md-toolbar class="md-toolbar-tools md-whiteframe-z2">
+    <span>flock</span>
+    <!-- fill up the space between left and right area -->
+    <span flex></span>
+  </md-toolbar>
+  <section layout="row" flex>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+      <md-list>
+        <md-list-item ng-click="derp()"><p>hi</p></md-list-item>
+      </md-list>
+    </md-sidenav>
+    <md-content flex layout-padding>
+      <div flex></div>
+    </md-content>
+  </section>
+</div>
