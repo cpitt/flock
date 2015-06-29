@@ -31,15 +31,10 @@ var expressConfig = function(app, express, db) {
   // Setup port for server to run on
   app.set('port', settings.server.port);
 
-   // Setup view engine for server side templating
-  app.engine('.html', require('ejs').__express);
-  app.set('view engine', 'html');
-
-  // Setup path where all server templates will reside
-  app.set('views', path.join(settings.root, 'server/templates'));
-
   // Enable GZip compression for all static assets
   app.use(compress());
+
+  //promises promises
 
   if (env === 'development') {
     // Include livereload script on all pages

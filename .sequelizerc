@@ -1,0 +1,17 @@
+var config = require('./server/config/env/default.js')
+
+var dbConfig = JSON.parse('{ "' + config.env + '" : ' +
+                                '{ ' +
+                                   '"username": "' + config.database.username + '", ' +
+                                   '"password": "' + config.database.password + '", ' +
+                                   '"database": "' + config.database.database + '", ' +
+                                   '"host": "' + config.database.options.host + '", ' +
+                                   '"dialect": "' + config.database.options.dialect + '",' +
+                                   '"migrationStorageTableName": "' + config.database.options.migrationStorageTableName  + '" ' +
+                                '}' +
+                           '}');
+dbConfig['migrations-path'] = config.database.migrations.path;
+dbConfig['models-path']    = config.database.models.path;
+dbConfig['config']         = __filename;
+
+module.exports = dbConfig;

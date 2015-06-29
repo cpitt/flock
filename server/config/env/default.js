@@ -7,12 +7,14 @@ var path = require('path');
 var _ = require('lodash');
 var env = process.env.NODE_ENV || 'development';
 var envConfig = require('./' + env);
+var secrets = require('../secrets.js');
 
 // All configurations will extend these options
 var defaults = {
+  env: env,
   server: {
     // Port to run server on
-    port: process.env.PORT || 9010,
+    port: process.env.PORT || 9011,
     // Host/URL to run server on
     host: process.env.HOSTNAME || '127.0.0.1',
     // Log level
@@ -32,10 +34,13 @@ var defaults = {
     ]
   },
   database: {
-    // URL to connect to database
-    url: process.env.DBURL || 'postgres://flock:flock@localhost:5432/flock',
+    database: 'flock_dev',
+    username: 'flock',
+    password: 'flock',
     // Sequelize database options
     options: {
+      host: 'localhost',
+      port: '5432',
       // Database Type
       dialect: 'postgres',
 
@@ -44,7 +49,7 @@ var defaults = {
 
       // disable inserting undefined values as NULL
       // - default: false
-      omitNull: false,
+      omitNull: true,
 
       // a flag for using a native library or not.
       // in the case of 'pg' -- set this to true will allow SSL support
@@ -62,6 +67,8 @@ var defaults = {
         freezeTableName: false,
         charset: 'utf8',
         collate: 'utf8_general_ci',
+        underscored: true,
+        underscoredAll: true,
         timestamps: true
       },
 
@@ -82,7 +89,14 @@ var defaults = {
 
       // language is used to determine how to translate words into singular or plural form based on the [lingo project](https://github.com/visionmedia/lingo)
       // options are: en [default], es
-      language: 'en'
+      language: 'en',
+      migrationStorageTableName: 'sequelize_meta'
+    },
+    migrations: {
+      path: path.normalize(__dirname + '../../../migrations/')
+    },
+    models: {
+      path: path.normalize(__dirname + '../../../models/')
     }
   },
   root: path.normalize(__dirname + '/../../..'),
@@ -110,4 +124,4 @@ var defaults = {
 };
 
 // Export the config object based on the NODE_ENV
-module.exports = _.merge(defaults, envConfig);
+module.exports = _.merge(defaults, envConfig, secrets);

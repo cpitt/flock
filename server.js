@@ -13,26 +13,28 @@ require('colors');
 var app = express();
 
 // Database configuration
-var db = require('./server/config/database');
+var db = require('./server/models/index.js');
 
 // Express configuration
 require('./server/config/express')(app, express, db);
 
 // Verify database connection and sync tables
-db.sequelize.authenticate().complete(function(err) {
-  if (!!err) {
-    throw '✗ Database Connection Error: '.red + err;
-  }
-  else {
+db
+  .sequelize
+  .authenticate()
+  .then( function(){
     console.log('✔ Database Connection Success!'.green);
-    db.sequelize.sync()
-      .success(function() {
-        console.log('✔ Database Synced!'.green);
-      }).error(function() {
-        throw '✗ Database Not Synced!'.red;
-      });
-  }
-});
+      db.umzug.up()
+        .then( function(migrations) {
+          console.log('✔ Migrations Successful!'.green);
+        })
+        .catch(function(err) {
+          console.log('✗ Database not Migrated!'.red + err);
+        });
+  })
+  .catch( function(err){
+    console.log( '✗ Database Connection Error: '.red + err );
+  });
 
 // Start Express server.
 app.listen(app.get('port'), function() {
